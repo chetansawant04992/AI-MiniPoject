@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI & Data Science Department | Intelligent Academic Portal & Iris Assistant</title>
+  <meta name="description" content="Official Artificial Intelligence & Data Science Department Portal with Iris AI Assistant, DGX GPU Supercluster allocation, Academic schedules, and Real-time News.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Navigation Header -->
+  <header class="main-header" id="mainHeader">
+    <div class="header-container">
+      <div class="brand-group" id="brandLogo" role="button" tabindex="0">
+        <div class="brand-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">AI & Data Science</span>
+          <span class="brand-subtitle">Artificial Intelligence & Data Science Department</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="nav-btn active" id="navHome" data-target="homeView">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </button>
+        <button class="btn-latest-updates" id="navUpdatesBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span>Latest Updates</span>
+          <span class="badge-pulse"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APP VIEWS CONTAINER -->
+  <main class="app-main-wrapper">
+    
+    <!-- VIEW 1: HOME & ASSISTANT VIEW -->
+    <section class="view-section active-view" id="homeView">
+      
+      <!-- Hero Top Section -->
+      <div class="hero-top-section">
+        <div class="hero-left-content">
+          <h1 class="hero-headline">
+            Hello! I'm your <span class="gradient-text-aids">AI&amp;DS</span> <span class="gradient-text-dept">Department Assistant</span>
+          </h1>
+        </div>
+
+        <!-- Hero Right Graphic: Iris Core Orb -->
+        <div class="hero-right-graphic">
+          <div class="iris-orbital-container" id="irisInteractiveOrb" role="button" tabindex="0" title="Click to interact with Iris Core">
+            <div class="orbital-ring"></div>
+            <div class="iris-core-card">
+              <div class="iris-avatar-box">
+                <i class="fa-solid fa-robot"></i>
+                <div class="avatar-glow"></div>
+              </div>
+              <div class="iris-core-title">Iris Core</div>
+              <div class="iris-core-subtitle">Department Bot</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Two-Column Layout (Chat Interface + Sidebar Widgets) -->
+      <div class="dashboard-grid-layout">
+        
+        <!-- LEFT COLUMN: AI Chatbot Interface -->
+        <div class="chat-interface-container" id="chatInterface">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="chat-identity">
+              <div class="assistant-avatar">
+                <i class="fa-solid fa-microchip"></i>
+              </div>
+              <div class="assistant-meta">
+                <div class="name-row">
+                  <span class="assistant-title">AI&amp;DS Assistant</span>
+                  <span class="verified-pill"><i class="fa-solid fa-check"></i> Verified</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-header-actions">
+              <button class="chat-action-btn" id="ttsToggleBtn" title="Toggle Text-to-Speech Voice">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+              <button class="chat-action-btn" id="resetChatBtn" title="Reset Conversation">
+                <i class="fa-solid fa-arrow-rotate-right"></i>
+              </button>
+              <button class="chat-action-btn" id="languageBtn" title="Language: English (US)">
+                <i class="fa-solid fa-globe"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Scrollable Message Body -->
+          <div class="chat-messages-viewport" id="chatMessagesViewport">
+            <!-- Dynamic messages appended here via JS -->
+            <div id="dynamicMessagesArea"></div>
+
+            <!-- Bot Typing Indicator -->
+            <div class="chat-msg bot-msg typing-indicator-container" id="typingIndicator" style="display: none;">
+              <div class="msg-avatar">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div class="msg-content-wrapper">
+                <div class="typing-bubble">
+                  <span class="typing-dot"></span>
+                  <span class="typing-dot"></span>
+                  <span class="typing-dot"></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick Suggestion / Common Questions Pills Grid -->
+          <div class="common-questions-section">
+            <div class="section-label-row">
+              <span class="label-text">COMMON QUESTIONS</span>
+              <span class="sub-label-text">Click any pill to query instantly</span>
+            </div>
+
+            <div class="quick-pills-grid" id="quickPillsGrid">
+              <button class="quick-pill-card" data-query="Can you give me the full AI&DS curriculum, syllabus, and credit distribution for B.Tech semesters?">
+                <div class="pill-icon book-icon"><i class="fa-solid fa-book-open"></i></div>
+                <div class="pill-text-block">
+                  <span class="pill-main">Curriculum</span>
+                  <span class="pill-sub">Syllabus &amp; Credits</span>
+                </div>
+              </button>
+
+              <button class="quick-pill-card" data-query="Show me the AI&DS faculty directory, their research labs, cabins, and office hours.">
+                <div class="pill-icon faculty-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <div class="pill-text-block">
+                  <span class="pill-main">Faculty</span>
+                  <span class="pill-sub">Office Hours &amp; Labs</span>
+                </div>
+              </button>
+
+              <button class="quick-pill-card" data-query="Show me the current semester weekly lecture and practical timetable schedule.">
+                <div class="pill-icon timetable-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                <div class="pill-text-block">
+                  <span class="pill-main">Timetable</span>
+                  <span class="pill-sub">Lectures &amp; Practic...</span>
+                </div>
+              </button>
+
+              <button class="quick-pill-card" data-query="What is the detailed schedule and guidelines for the upcoming Mid-Term & Final examinations?">
+                <div class="pill-icon exam-icon"><i class="fa-solid fa-file-signature"></i></div>
+                <div class="pill-text-block">
+                  <span class="pill-main">Examinations</span>
+                  <span class="pill-sub">Mid-Terms &amp; Dates</span>
+                </div>
+              </button>
+
+              <button class="quick-pill-card" data-query="Give me the latest AI&DS campus placement statistics, top recruiting companies, and CTC breakdown.">
+                <div class="pill-icon placement-icon"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="pill-text-block">
+                  <span class="pill-main">Placements</span>
+                  <span class="pill-sub">96.4% Stat &amp; CTC</span>
+                </div>
+              </button>
+
+              <button class="quick-pill-card" data-query="How do students access the NVIDIA DGX A100 & H100 Supercluster for Deep Learning project training?">
+                <div class="pill-icon gpu-icon"><i class="fa-solid fa-server"></i></div>
+                <div class="pill-text-block">
+                  <span class="pill-main">Projects &amp; GPU</span>
+                  <span class="pill-sub">NVIDIA DGX Cluster</span>
+                </div>
+              </button>
+
+              <button class="quick-pill-card" data-query="What are the upcoming department events, datathons, symposiums, and summit dates?">
+                <div class="pill-icon events-icon"><i class="fa-solid fa-trophy"></i></div>
+                <div class="pill-text-block">
+                  <span class="pill-main">Dept Events</span>
+                  <span class="pill-sub">Datathons &amp; Sum...</span>
+                </div>
+              </button>
+
+              <button class="quick-pill-card" data-query="List all recent October 2026 circulars, official bulletins, and department dispatches.">
+                <div class="pill-icon notices-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                <div class="pill-text-block">
+                  <span class="pill-main">Notices</span>
+                  <span class="pill-sub">Oct 2026 Bulletins</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Input Controls Bar -->
+          <div class="chat-input-container">
+            <form class="chat-form" id="chatForm">
+              <div class="input-wrapper">
+                <button type="button" class="input-tool-btn" id="attachFileBtn" title="Attach Project Notebook / File (.ipynb, .pdf)">
+                  <i class="fa-solid fa-paperclip"></i>
+                </button>
+                <input 
+                  type="text" 
+                  id="chatInputField" 
+                  class="chat-input-box" 
+                  placeholder="Ask anything about AI&amp;DS... (e.g., DGX cluster booking, sem exams, faculty)" 
+                  autocomplete="off"
+                >
+                <button type="button" class="input-tool-btn" id="voiceInputBtn" title="Voice Input (Speech-to-Text)">
+                  <i class="fa-solid fa-microphone"></i>
+                </button>
+              </div>
+              <button type="submit" class="send-message-btn" id="sendMessageBtn" title="Send Message">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: LATEST NEWS & UPDATES (SECOND SCREENSHOT) -->
+    <section class="view-section" id="newsView" style="display: none;">
+      
+      <!-- News Sub-header & Navigation -->
+      <div class="news-top-bar">
+        <button class="btn-back-chatbot" id="backToChatbotBtn">
+          <i class="fa-solid fa-arrow-left"></i> Back to AI&amp;DS Chatbot
+        </button>
+        <div class="news-term-indicators">
+          <span class="realtime-feed-pill">
+            <span class="pulse-blue"></span> Real-Time Feed
+          </span>
+          <span class="academic-year-text">Academic Year 2026-27</span>
+        </div>
+      </div>
+
+      <!-- News Header Title Section -->
+      <div class="news-header-block">
+        <h2 class="news-main-title">Latest News &amp; Updates</h2>
+        <p class="news-main-subtitle">
+          Stay updated with the latest announcements, events, academic activities, and achievements from the AI &amp; Data Science Department.
+        </p>
+      </div>
+
+      <!-- News Search & Filter Controls -->
+      <div class="news-controls-card">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input 
+            type="text" 
+            id="newsSearchInput" 
+            class="news-search-box" 
+            placeholder="Search latest updates by keyword, course, or notice..."
+          >
+          <button class="clear-search-btn" id="clearNewsSearchBtn" style="display: none;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="filter-and-count-row">
+          <div class="filter-pills-list" id="newsFilterList">
+            <button class="filter-tab active" data-category="all">All Updates</button>
+          </div>
+
+          <div class="records-counter">
+            Showing: <span class="counter-badge" id="newsCountBadge">6</span> records
+          </div>
+        </div>
+      </div>
+
+      <!-- News Cards 3x2 Grid (Exact matches to Screenshot 2) -->
+      <div class="news-cards-grid" id="newsCardsGrid">
+        
+        <!-- CARD 1: Announcement - Internal Exam Schedule Released -->
+        <article class="news-card" data-category="announcements" data-id="1">
+          <div class="card-media-banner laptop-bg">
+            <div class="card-badge announcement-badge">
+              <i class="fa-solid fa-bell"></i> Announcement
+            </div>
+            <div class="card-floating-date">
+              <i class="fa-regular fa-calendar"></i> 07 October 2026
+            </div>
+            <div class="mock-device-illustration">
+              <div class="mock-laptop-screen">
+                <i class="fa-solid fa-table-cells"></i>
+                <span>EXAM ROSTER 2026</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-reference-tag">NOTICE REF: AI-EX-26/10</span>
+            <h3 class="card-heading">Internal Examination Schedule Released</h3>
+            <p class="card-summary">
+              The department has released the schedule for the upcoming internal examinations. Review dates, assigned lab modules, and invigilation slots.
+            </p>
+            <div class="card-footer-action">
+              <span class="read-meta"><i class="fa-regular fa-clock"></i> 3 min read</span>
+              <button class="read-more-link" onclick="openNewsModal(1)">
+                Read More <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 2: Event - AI & Data Science Workshop -->
+        <article class="news-card" data-category="events" data-id="2">
+          <div class="card-media-banner lab-bg">
+            <div class="card-badge event-badge">
+              <i class="fa-solid fa-lightbulb"></i> Event
+            </div>
+            <div class="card-floating-date">
+              <i class="fa-regular fa-calendar"></i> 05 October 2026
+            </div>
+            <div class="mock-device-illustration">
+              <div class="mock-monitor-screen">
+                <i class="fa-solid fa-brain"></i>
+                <span>LLM WORKSHOP</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-reference-tag">SYMPOSIUM SERIES #04</span>
+            <h3 class="card-heading">AI &amp; Data Science Workshop</h3>
+            <p class="card-summary">
+              A hands-on workshop on Generative AI and Machine Learning will be conducted for students, featuring live tensor model fine-tuning and API integration.
+            </p>
+            <div class="card-footer-action">
+              <span class="read-meta"><i class="fa-solid fa-user-check"></i> Limited Seats</span>
+              <button class="read-more-link" onclick="openNewsModal(2)">
+                Read More <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 3: Achievement - Students Selected for Internship Program -->
+        <article class="news-card" data-category="achievements" data-id="3">
+          <div class="card-media-banner campus-bg">
+            <div class="card-badge achievement-badge">
+              <i class="fa-solid fa-award"></i> Achievement
+            </div>
+            <div class="card-floating-date">
+              <i class="fa-regular fa-calendar"></i> 02 October 2026
+            </div>
+            <div class="mock-device-illustration">
+              <div class="mock-students-avatar-group">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span>12 SELECTED</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-reference-tag">SPOTLIGHT STORY</span>
+            <h3 class="card-heading">Students Selected for Internship Program</h3>
+            <p class="card-summary">
+              AI&amp;DS students have successfully secured internship opportunities with leading technology companies, specializing in NLP and autonomous vision systems.
+            </p>
+            <div class="card-footer-action">
+              <span class="read-meta"><i class="fa-solid fa-briefcase"></i> 12 Placements</span>
+              <button class="read-more-link" onclick="openNewsModal(3)">
+                Read More <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 4: Placement - Campus Placement Drive -->
+        <article class="news-card" data-category="placement" data-id="4">
+          <div class="card-media-banner placement-bg">
+            <div class="card-badge placement-badge">
+              <i class="fa-solid fa-briefcase"></i> Placement
+            </div>
+            <div class="card-floating-date">
+              <i class="fa-regular fa-calendar"></i> 30 September 2026
+            </div>
+            <div class="mock-device-illustration placement-center-box">
+              <div class="briefcase-icon-box">
+                <i class="fa-solid fa-building"></i>
+              </div>
+              <span class="drive-label">Campus Placement Phase 1</span>
+              <span class="drive-sublabel">45+ Global Tech Recruiters</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-reference-tag">RECRUITMENT ROUND 2026-27</span>
+            <h3 class="card-heading">Campus Placement Drive</h3>
+            <p class="card-summary">
+              A placement drive for final-year AI &amp; Data Science students will be conducted soon. Eligible candidates are advised to verify their resume repository.
+            </p>
+            <div class="card-footer-action">
+              <span class="read-meta"><i class="fa-solid fa-building-columns"></i> 45+ Companies</span>
+              <button class="read-more-link" onclick="openNewsModal(4)">
+                Read More <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 5: Academic - New AI & ML Laboratory Activities -->
+        <article class="news-card" data-category="academic" data-id="5">
+          <div class="card-media-banner academic-bg">
+            <div class="card-badge academic-badge">
+              <i class="fa-solid fa-flask"></i> Academic
+            </div>
+            <div class="top-corner-pill">PyTorch 2.5</div>
+            <div class="card-floating-date">
+              <i class="fa-regular fa-calendar"></i> 28 September 2026
+            </div>
+            <div class="pipeline-diagram-box">
+              <div class="pipe-node">Data</div>
+              <div class="pipe-arrow">→</div>
+              <div class="pipe-node active-node">Model</div>
+              <div class="pipe-arrow">→</div>
+              <div class="pipe-node">Deploy</div>
+              <div class="sandbox-tag">v4.2 Sandbox Ready</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-reference-tag">CURRICULUM REVISION</span>
+            <h3 class="card-heading">New AI &amp; ML Laboratory Activities</h3>
+            <p class="card-summary">
+              New practical activities have been introduced for Artificial Intelligence and Machine Learning courses, with emphasis on transformers and diffusion pipelines.
+            </p>
+            <div class="card-footer-action">
+              <span class="read-meta"><i class="fa-solid fa-laptop-code"></i> Hands-on Lab</span>
+              <button class="read-more-link" onclick="openNewsModal(5)">
+                Read More <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 6: Event - Algorand-26 Annual Hackathon -->
+        <article class="news-card" data-category="events" data-id="6">
+          <div class="card-media-banner hackathon-bg">
+            <div class="card-badge event-badge">
+              <i class="fa-solid fa-code"></i> Event
+            </div>
+            <div class="top-corner-pill orange-pill">48H SPRINT</div>
+            <div class="hackathon-banner-content">
+              <div class="hack-title">ALGORAND '26</div>
+              <div class="hack-prize">$15,000 Grant Pool</div>
+            </div>
+            <div class="card-floating-date bottom-date">
+              <i class="fa-regular fa-calendar"></i> 25 September 2026
+              <span class="mentor-tag">Silicon Valley Mentors</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-reference-tag">FLAGSHIP SPRINT</span>
+            <h3 class="card-heading">Algorand-26 Annual Hackathon</h3>
+            <p class="card-summary">
+              Registrations now open for the 48-hour AI innovation sprint with industry mentorship, rapid prototyping, and startup seed grants.
+            </p>
+            <div class="card-footer-action">
+              <span class="read-meta"><i class="fa-solid fa-trophy"></i> $15k Pool</span>
+              <button class="read-more-link" onclick="openNewsModal(6)">
+                Read More <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: Request Compute Allocation -->
+  <div class="modal-backdrop" id="computeModal" style="display: none;">
+    <div class="modal-dialog-box animate-scale-up">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-server modal-title-icon"></i>
+          <h3>DGX Supercluster Compute Request</h3>
+        </div>
+        <button class="modal-close-btn" id="closeComputeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-intro">Submit your Slurm training configuration to reserve A100/H100 Tensor Core GPUs for AI Capstone research or Course Labs.</p>
+        <form id="computeRequestForm">
+          <div class="form-group">
+            <label>Project / Research Title</label>
+            <input type="text" id="projectTitleInput" class="form-control" placeholder="e.g. LLM Multi-Agent Reasoning Benchmark" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-half">
+              <label>GPU Target Node</label>
+              <select id="gpuTargetSelect" class="form-control">
+                <option value="H100">8x NVIDIA H100 SXM5 (80GB VRAM)</option>
+                <option value="A100" selected>4x NVIDIA A100 Tensor Core (40GB VRAM)</option>
+                <option value="V100">2x NVIDIA V100 Development Sandbox</option>
+              </select>
+            </div>
+            <div class="form-group col-half">
+              <label>Estimated Epochs / Duration</label>
+              <select id="durationSelect" class="form-control">
+                <option value="4h">4 Hours (Fast Sprint)</option>
+                <option value="12h" selected>12 Hours (Standard Training)</option>
+                <option value="48h">48 Hours (Slurm Long Queue)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Framework &amp; Dataset Source</label>
+            <input type="text" id="frameworkInput" class="form-control" placeholder="e.g. PyTorch 2.5 + HuggingFace Transformers + CUDA 12.4" value="PyTorch 2.5 + CUDA 12.4">
+          </div>
+          <div class="compute-quota-alert">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Your current allocated quota: <strong>120 GPU Hours</strong> remaining for Fall 2026.</span>
+          </div>
+          <div class="modal-actions-footer">
+            <button type="button" class="btn btn-outline" id="cancelComputeBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="submitComputeBtn">
+              <i class="fa-solid fa-paper-plane"></i> Submit Allocation Job
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Placement Report Preview & Download -->
+  <div class="modal-backdrop" id="placementModal" style="display: none;">
+    <div class="modal-dialog-box animate-scale-up">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-file-pdf modal-title-icon text-danger"></i>
+          <h3>Class of 2026 Placement Report</h3>
+        </div>
+        <button class="modal-close-btn" id="closePlacementModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="report-summary-stats">
+          <div class="rep-stat-box">
+            <span class="rep-label">Highest Package</span>
+            <span class="rep-val">$240,000 / yr</span>
+          </div>
+          <div class="rep-stat-box">
+            <span class="rep-label">Median Package</span>
+            <span class="rep-val">$118,500 / yr</span>
+          </div>
+          <div class="rep-stat-box">
+            <span class="rep-label">Placement Percentage</span>
+            <span class="rep-val text-success">96.4%</span>
+          </div>
+        </div>
+        <h4 class="modal-subheading">Major Recruiters:</h4>
+        <div class="recruiter-tags-cloud">
+          <span class="company-badge">Google DeepMind</span>
+          <span class="company-badge">Microsoft Research</span>
+          <span class="company-badge">OpenAI</span>
+          <span class="company-badge">Databricks</span>
+          <span class="company-badge">Amazon AWS AI</span>
+          <span class="company-badge">Snowflake</span>
+          <span class="company-badge">NVIDIA AI Labs</span>
+          <span class="company-badge">Meta AI</span>
+        </div>
+        <div class="modal-actions-footer">
+          <button type="button" class="btn btn-outline" id="closePlacementBtn2">Close</button>
+          <button type="button" class="btn btn-primary" id="downloadReportPdfBtn">
+            <i class="fa-solid fa-download"></i> Download Full PDF Report (12 Pages)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Department Information (About / Academics / Faculty / Contact) -->
+  <div class="modal-backdrop" id="deptInfoModal" style="display: none;">
+    <div class="modal-dialog-box animate-scale-up">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-circle-info modal-title-icon" id="infoModalIcon"></i>
+          <h3 id="infoModalTitle">Department Information</h3>
+        </div>
+        <button class="modal-close-btn" id="closeInfoModalBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="infoModalBody">
+        <!-- Injected via JavaScript based on menu button -->
+      </div>
+      <div class="modal-actions-footer">
+        <button type="button" class="btn btn-primary" id="closeInfoModalFooterBtn">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: News Article Details Modal -->
+  <div class="modal-backdrop" id="newsArticleModal" style="display: none;">
+    <div class="modal-dialog-box modal-lg animate-scale-up">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="badge" id="articleModalBadge">Announcement</span>
+          <h3 id="articleModalTitle">Article Title</h3>
+        </div>
+        <button class="modal-close-btn" id="closeArticleModalBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="articleModalBody">
+        <!-- Injected by openNewsModal() -->
+      </div>
+      <div class="modal-actions-footer">
+        <button type="button" class="btn btn-outline" id="closeArticleModalFooterBtn">Close Notice</button>
+        <button type="button" class="btn btn-primary" id="askAssistantAboutArticleBtn">
+          <i class="fa-solid fa-robot"></i> Ask Iris About This Notice
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Overlay -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Audio Element for Sound FX -->
+  <audio id="popAudio" preload="auto" src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"></audio>
+
+  <script src="app.js"></script>
+</body>
+</html>
