@@ -65,7 +65,7 @@ const AIDS_KNOWLEDGE_BASE = {
 };
 
 // --- News Database for News & Updates Portal ---
-const NEWS_ARTICLES = [
+let NEWS_ARTICLES = [
   {
     id: 1,
     category: 'announcements',
@@ -205,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupChatbot();
   setupSidebarWidgets();
   setupNewsView();
+  loadNewsFromAPI();
   setupModals();
   setupIrisOrb();
   simulateComputeFluctuations();
@@ -234,7 +235,7 @@ function setupNavigation() {
     newsView.style.display = 'block';
     navHome.classList.remove('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    renderNewsCards();
+    loadNewsFromAPI();
   }
 
   navHome.addEventListener('click', switchToHome);
@@ -405,7 +406,7 @@ function handleUserMessage(queryText) {
   setTimeout(() => {
     typingIndicator.style.display = 'none';
     const answerHtml = generateAssistantResponse(queryText);
-    
+
     const botMsgEl = document.createElement('div');
     botMsgEl.className = 'chat-msg bot-msg animate-pop';
     botMsgEl.innerHTML = `
@@ -512,39 +513,122 @@ function setupNewsView() {
   });
 }
 
+
 function renderNewsCards() {
-  const searchInput = document.getElementById('newsSearchInput');
-  const newsCardsGrid = document.getElementById('newsCardsGrid');
-  const countBadge = document.getElementById('newsCountBadge');
-  const term = searchInput ? searchInput.value.toLowerCase().trim() : '';
+  const grid = document.getElementById("newsCardsGrid");
+  const searchInput = document.getElementById("newsSearchInput");
+  const countBadge = document.getElementById("newsCountBadge");
 
-  const cards = newsCardsGrid.querySelectorAll('.news-card');
-  let visibleCount = 0;
+  if (!grid) return;
 
-  cards.forEach(card => {
-    const category = card.getAttribute('data-category');
-    const title = card.querySelector('.card-heading').innerText.toLowerCase();
-    const summary = card.querySelector('.card-summary').innerText.toLowerCase();
-    const ref = card.querySelector('.card-reference-tag')?.innerText.toLowerCase() || '';
+  const term = searchInput
+    ? searchInput.value.toLowerCase().trim()
+    : "";
 
-    const matchesCategory = (currentNewsCategory === 'all' || category === currentNewsCategory);
-    const matchesSearch = (!term || title.includes(term) || summary.includes(term) || ref.includes(term));
+  const filtered = NEWS_ARTICLES.filter(article => {
+    const matchesCategory =
+      currentNewsCategory === "all" ||
+      article.category === currentNewsCategory;
 
-    if (matchesCategory && matchesSearch) {
-      card.style.display = 'flex';
-      visibleCount++;
-    } else {
-      card.style.display = 'none';
+    const searchableText = [
+      article.title,
+      article.summary,
+      article.ref,
+      article.author
+    ].join(" ").toLowerCase();
+
+    return matchesCategory &&
+      (!term || searchableText.includes(term));
+  });
+
+  grid.innerHTML = "";
+
+  filtered.forEach(article => {
+    const meta = CATEGORY_META[article.category] ||
+      CATEGORY_META.announcements;
+
+    const card = document.createElement("article");
+    card.className = "news-card";
+    card.dataset.category = article.category;
+    card.dataset.id = String(article.id);
+
+    const banner = document.createElement("div");
+    banner.className =
+      `card-media-banner user-card-bg ${meta.bgClass}`;
+
+    banner.innerHTML = `
+      <div class="card-badge ${meta.badgeClass}">
+        <i class="${meta.icon}"></i>
+        ${escapeHtml(meta.badge)}
+      </div>
+      <div class="card-floating-date">
+        <i class="fa-regular fa-calendar"></i>
+        ${escapeHtml(article.date || "")}
+      </div>
+      <div class="user-card-illustration">
+        <div class="user-card-icon">
+          <i class="${meta.cardIcon}"></i>
+        </div>
+        <span class="user-card-label">
+          ${escapeHtml(meta.badge.toUpperCase())}
+        </span>
+      </div>
+    `;
+
+    const body = document.createElement("div");
+    body.className = "card-body";
+
+    const reference = document.createElement("span");
+    reference.className = "card-reference-tag";
+    reference.textContent = article.ref || "DEPARTMENT UPDATE";
+
+    const heading = document.createElement("h3");
+    heading.className = "card-heading";
+    heading.textContent = article.title;
+
+    const summary = document.createElement("p");
+    summary.className = "card-summary";
+    summary.textContent = article.summary;
+
+    const footer = document.createElement("div");
+    footer.className = "card-footer-action";
+
+    const author = document.createElement("span");
+    author.className = "read-meta";
+    author.textContent = article.author || "AI&DS Faculty";
+
+    const readMore = document.createElement("button");
+    readMore.className = "read-more-link";
+    readMore.innerHTML =
+      'Read More <i class="fa-solid fa-arrow-right"></i>';
+    readMore.addEventListener("click", () => {
+      openNewsModal(article.id);
+    });
+
+    footer.append(author, readMore);
+    body.append(reference, heading, summary);
+
+    if (article.link) {
+      const link = document.createElement("a");
+      link.className = "user-card-link";
+      link.href = article.link;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "Official Document Link";
+      body.appendChild(link);
     }
+
+    body.appendChild(footer);
+    card.append(banner, body);
+    grid.appendChild(card);
   });
 
   if (countBadge) {
-    countBadge.innerText = visibleCount;
+    countBadge.textContent = filtered.length;
   }
 }
-
 // Global modal opener for News
-window.openNewsModal = function(articleId) {
+window.openNewsModal = function (articleId) {
   const article = NEWS_ARTICLES.find(a => a.id === articleId);
   if (!article) return;
 
@@ -799,3 +883,503 @@ function showToast(message) {
 function escapeHtml(string) {
   return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+// ==========================================================================
+// 8. FACULTY ANNOUNCEMENT / ADD UPDATE FEATURE
+//    Authorized Faculty Portal for publishing departmental notices.
+//    Uses localStorage for persistence with backwards-compatibility.
+// ==========================================================================
+
+/** Storage keys for faculty announcements */
+const FACULTY_UPDATES_STORAGE_KEY = 'aids_faculty_updates';
+const LEGACY_UPDATES_STORAGE_KEY = 'aids_user_updates';
+
+/** Category metadata mapping */
+const CATEGORY_META = {
+  announcements: { badge: 'Announcement', badgeClass: 'announcement-badge', icon: 'fa-solid fa-bell', bgClass: 'cat-announcements', cardIcon: 'fa-solid fa-bullhorn' },
+  events: { badge: 'Event', badgeClass: 'event-badge', icon: 'fa-solid fa-lightbulb', bgClass: 'cat-events', cardIcon: 'fa-solid fa-calendar-check' },
+  achievements: { badge: 'Achievement', badgeClass: 'achievement-badge', icon: 'fa-solid fa-award', bgClass: 'cat-achievements', cardIcon: 'fa-solid fa-trophy' },
+  placement: { badge: 'Placement', badgeClass: 'placement-badge', icon: 'fa-solid fa-briefcase', bgClass: 'cat-placement', cardIcon: 'fa-solid fa-building' },
+  academic: { badge: 'Academic', badgeClass: 'academic-badge', icon: 'fa-solid fa-flask', bgClass: 'cat-academic', cardIcon: 'fa-solid fa-laptop-code' }
+};
+
+
+
+const API_URL = "http://127.0.0.1:5000/api/news";
+
+// Convert a backend record into the format used by the frontend.
+function mapApiNews(item) {
+  const category = CATEGORY_META[item.category]
+    ? item.category
+    : "announcements";
+
+  const dateDisplay = /^\d{4}-\d{2}-\d{2}$/.test(item.date || "")
+    ? formatDateDisplay(item.date)
+    : (item.date || "");
+
+  return {
+    ...item,
+    category,
+    badge: CATEGORY_META[category].badge,
+    badgeClass: CATEGORY_META[category].badgeClass,
+    ref: item.ref || `FACULTY CIRCULAR • ${item.author || "AI&DS"}`,
+    date: dateDisplay,
+    dateDisplay,
+    summary: item.description || "",
+    meta: item.author || "AI&DS Faculty",
+    content: item.content ||
+      `<p>${escapeHtml(item.description || "")}</p>`
+  };
+}
+
+// Fetch announcements from Flask.
+async function loadNewsFromAPI() {
+  try {
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      throw new Error(`Server returned ${response.status}`);
+    }
+
+    const records = await response.json();
+
+    NEWS_ARTICLES = records.map(mapApiNews);
+
+    renderNewsCards();
+  } catch (error) {
+    console.error("Unable to load news:", error);
+    showToastVariant(
+      "Could not load news. Check that Flask is running.",
+      "error"
+    );
+  }
+}
+
+
+
+/**
+ * Load faculty-created updates from localStorage.
+ * @returns {Array} Array of update objects
+ */
+function loadFacultyUpdates() {
+  try {
+    let raw = localStorage.getItem(FACULTY_UPDATES_STORAGE_KEY);
+    if (!raw) {
+      // Check legacy key for migration
+      raw = localStorage.getItem(LEGACY_UPDATES_STORAGE_KEY);
+    }
+    const list = raw ? JSON.parse(raw) : [];
+    // Ensure legacy items have clean faculty author and no 'user' labels
+    return list.map(item => ({
+      ...item,
+      author: item.author || 'AI&DS Faculty Council'
+    }));
+  } catch (e) {
+    console.warn('Failed to load faculty updates from localStorage:', e);
+    return [];
+  }
+}
+
+/**
+ * Save faculty-created updates to localStorage.
+ * @param {Array} updates
+ */
+function saveFacultyUpdates(updates) {
+  try {
+    localStorage.setItem(FACULTY_UPDATES_STORAGE_KEY, JSON.stringify(updates));
+  } catch (e) {
+    console.warn('Failed to save faculty updates to localStorage:', e);
+  }
+}
+
+/**
+ * Format a date string (YYYY-MM-DD) to display format (DD Month YYYY).
+ * @param {string} dateStr
+ * @returns {string}
+ */
+function formatDateDisplay(dateStr) {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const day = parseInt(parts[2], 10);
+  const month = months[parseInt(parts[1], 10) - 1] || '';
+  const year = parts[0];
+  return `${String(day).padStart(2, '0')} ${month} ${year}`;
+}
+
+/**
+ * Generate a unique ID for a new faculty update.
+ * @returns {number}
+ */
+function generateUpdateId() {
+  return Date.now() + Math.floor(Math.random() * 1000);
+}
+
+/**
+ * Build a news card DOM element from a faculty update object.
+ * Uses safe text rendering (escapeHtml) to prevent XSS.
+ * @param {Object} update
+ * @param {boolean} animate - whether to add entrance animation
+ * @returns {HTMLElement}
+ */
+function buildFacultyCardElement(update, animate) {
+  const meta = CATEGORY_META[update.category] || CATEGORY_META.announcements;
+  const card = document.createElement('article');
+  card.className = 'news-card' + (animate ? ' card-just-added' : '');
+  card.setAttribute('data-category', update.category);
+  card.setAttribute('data-id', 'faculty-' + update.id);
+
+  // Build link HTML (safe)
+  let linkHtml = '';
+  if (update.link) {
+    const safeLink = escapeHtml(update.link);
+    linkHtml = `<a class="user-card-link" href="${safeLink}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Official Document Link</a>`;
+  }
+
+  const authorName = update.author ? escapeHtml(update.author) : 'AI&DS Faculty Desk';
+
+  card.innerHTML = `
+    <div class="card-media-banner user-card-bg ${meta.bgClass}">
+      <div class="card-badge ${meta.badgeClass}">
+        <i class="${meta.icon}"></i> ${escapeHtml(meta.badge)}
+      </div>
+      <div class="card-floating-date">
+        <i class="fa-regular fa-calendar"></i> ${escapeHtml(update.dateDisplay)}
+      </div>
+      <div class="user-card-illustration">
+        <div class="user-card-icon"><i class="${meta.cardIcon}"></i></div>
+        <span class="user-card-label">${escapeHtml(meta.badge.toUpperCase())}</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="card-reference-tag">FACULTY CIRCULAR • ${authorName.toUpperCase()}</span>
+      <h3 class="card-heading">${escapeHtml(update.title)}</h3>
+      <p class="card-summary">${escapeHtml(update.description)}</p>
+      ${linkHtml}
+      <div class="card-footer-action">
+        <span class="read-meta"><i class="fa-solid fa-chalkboard-user"></i> ${authorName}</span>
+        <button class="read-more-link" onclick="openNewsModal(${update.id})">
+          Read More <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+/**
+ * Render all persisted faculty updates into the news grid (at the top).
+ */
+function renderPersistedFacultyCards() {
+  const grid = document.getElementById('newsCardsGrid');
+  if (!grid) return;
+
+  // Remove any previously rendered faculty cards
+  grid.querySelectorAll('.news-card[data-id^="faculty-"], .news-card[data-id^="user-"]').forEach(el => el.remove());
+
+  const updates = loadFacultyUpdates();
+  // Insert in reverse chronological order (newest first) at the top
+  updates.forEach(update => {
+    const card = buildFacultyCardElement(update, false);
+    grid.insertBefore(card, grid.firstChild);
+  });
+}
+
+/**
+ * Validate the Add Update form fields.
+ * @returns {Object|null} Validated data object or null if invalid
+ */
+function validateAddUpdateForm() {
+  const titleInput = document.getElementById('addUpdateTitle');
+  const categorySelect = document.getElementById('addUpdateCategory');
+  const dateInput = document.getElementById('addUpdateDate');
+  const facultyAuthorInput = document.getElementById('addUpdateFacultyAuthor');
+  const descriptionInput = document.getElementById('addUpdateDescription');
+  const linkInput = document.getElementById('addUpdateLink');
+
+  const errorTitle = document.getElementById('errorTitle');
+  const errorFacultyAuthor = document.getElementById('errorFacultyAuthor');
+  const errorDescription = document.getElementById('errorDescription');
+  const errorLink = document.getElementById('errorLink');
+
+  let isValid = true;
+
+  // Clear previous errors
+  [errorTitle, errorFacultyAuthor, errorDescription, errorLink].forEach(el => { if (el) el.textContent = ''; });
+  [titleInput, facultyAuthorInput, descriptionInput, linkInput].forEach(el => { if (el) el.classList.remove('input-error'); });
+
+  // Title validation
+  const title = titleInput.value.trim();
+  if (!title) {
+    errorTitle.textContent = 'Announcement title is required.';
+    titleInput.classList.add('input-error');
+    isValid = false;
+  } else if (title.length < 3) {
+    errorTitle.textContent = 'Title must be at least 3 characters.';
+    titleInput.classList.add('input-error');
+    isValid = false;
+  }
+
+  // Date validation
+  const dateVal = dateInput.value;
+  if (!dateVal) {
+    isValid = false;
+    dateInput.classList.add('input-error');
+  }
+
+  // Faculty Author validation
+  const authorVal = facultyAuthorInput ? facultyAuthorInput.value.trim() : 'AI&DS Faculty Council';
+  if (facultyAuthorInput && !authorVal) {
+    if (errorFacultyAuthor) errorFacultyAuthor.textContent = 'Faculty authority / name is required.';
+    facultyAuthorInput.classList.add('input-error');
+    isValid = false;
+  }
+
+  // Description validation
+  const description = descriptionInput.value.trim();
+  if (!description) {
+    errorDescription.textContent = 'Description is required.';
+    descriptionInput.classList.add('input-error');
+    isValid = false;
+  } else if (description.length < 10) {
+    errorDescription.textContent = 'Description must be at least 10 characters.';
+    descriptionInput.classList.add('input-error');
+    isValid = false;
+  }
+
+  // Optional URL validation
+  const link = linkInput.value.trim();
+  if (link) {
+    try {
+      const url = new URL(link);
+      if (!['http:', 'https:'].includes(url.protocol)) {
+        throw new Error('Invalid protocol');
+      }
+    } catch {
+      errorLink.textContent = 'Please enter a valid URL (https://...).';
+      linkInput.classList.add('input-error');
+      isValid = false;
+    }
+  }
+
+  if (!isValid) return null;
+
+  return {
+    id: generateUpdateId(),
+    title: title,
+    category: categorySelect.value,
+    date: dateVal,
+    dateDisplay: formatDateDisplay(dateVal),
+    author: authorVal,
+    description: description,
+    link: link || '',
+    createdAt: new Date().toISOString()
+  };
+}
+
+/**
+ * Setup the Faculty Add Announcement feature: FAB button, modal, form handlers.
+ */
+function setupAddUpdateFeature() {
+  const fabBtn = document.getElementById('fabAddUpdateBtn');
+  const modal = document.getElementById('addUpdateModal');
+  const closeBtn = document.getElementById('closeAddUpdateModalBtn');
+  const cancelBtn = document.getElementById('cancelAddUpdateBtn');
+  const form = document.getElementById('addUpdateForm');
+  const dateInput = document.getElementById('addUpdateDate');
+  const facultyAuthorInput = document.getElementById('addUpdateFacultyAuthor');
+
+  if (!fabBtn || !modal || !form) return;
+
+  // Set default date to today
+  const today = new Date();
+  const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+  if (dateInput) dateInput.value = todayStr;
+
+  // --- Open modal ---
+  fabBtn.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    // Reset form and errors
+    form.reset();
+    if (dateInput) dateInput.value = todayStr;
+    if (facultyAuthorInput) facultyAuthorInput.value = 'AI&DS Faculty Council';
+    modal.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+    modal.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    // Focus title field
+    setTimeout(() => {
+      document.getElementById('addUpdateTitle')?.focus();
+    }, 100);
+  });
+
+  // --- Close modal helpers ---
+  function closeModal() {
+    modal.style.display = 'none';
+  }
+
+  closeBtn?.addEventListener('click', closeModal);
+  cancelBtn?.addEventListener('click', closeModal);
+
+  // Close on backdrop click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'flex') {
+      closeModal();
+    }
+  });
+
+  // --- Form submission ---
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const updateData = validateAddUpdateForm();
+
+    if (!updateData) {
+      showToastVariant(
+        'Please fix the errors above before publishing.',
+        'error'
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        'http://127.0.0.1:5000/api/news',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: updateData.title,
+            category: updateData.category,
+            date: updateData.date,
+            author: updateData.author,
+            description: updateData.description,
+            link: updateData.link
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.error || result.message ||
+          `Request failed: ${response.status}`
+        );
+      }
+
+      const updates = loadFacultyUpdates();
+      updates.unshift(updateData);
+      saveFacultyUpdates(updates);
+
+      const grid = document.getElementById('newsCardsGrid');
+
+      if (grid) {
+        const card = buildFacultyCardElement(updateData, true);
+        grid.insertBefore(card, grid.firstChild);
+      }
+
+      NEWS_ARTICLES.unshift({
+        id: updateData.id,
+        category: updateData.category,
+        badge: CATEGORY_META[updateData.category]?.badge || 'Notice',
+        badgeClass:
+          CATEGORY_META[updateData.category]?.badgeClass ||
+          'announcement-badge',
+        ref: 'FACULTY CIRCULAR • ' +
+          (updateData.author || 'AI&DS FACULTY').toUpperCase(),
+        title: updateData.title,
+        date: updateData.dateDisplay,
+        meta: updateData.author || 'Faculty Notice',
+        summary: updateData.description,
+        content: `<p>${escapeHtml(updateData.description)}</p>`
+      });
+
+      renderNewsCards();
+
+      modal.style.display = 'none';
+
+      showToastVariant(
+        'Announcement saved successfully!',
+        'success'
+      );
+
+    } catch (error) {
+      console.error('Announcement submission failed:', error);
+
+      showToastVariant(
+        `Could not save announcement: ${error.message}`,
+        'error'
+      );
+    }
+  });
+
+
+  // Also push persisted items into NEWS_ARTICLES for article modal support
+  const persisted = loadFacultyUpdates();
+  persisted.forEach(update => {
+    // Avoid duplicates if already in array
+    if (!NEWS_ARTICLES.find(a => a.id === update.id)) {
+      NEWS_ARTICLES.push({
+        id: update.id,
+        category: update.category,
+        badge: CATEGORY_META[update.category]?.badge || 'Notice',
+        badgeClass: CATEGORY_META[update.category]?.badgeClass || 'announcement-badge',
+        ref: 'FACULTY CIRCULAR • ' + (update.author || 'AI&DS FACULTY').toUpperCase(),
+        title: update.title,
+        date: update.dateDisplay,
+        meta: update.author || 'Faculty Notice',
+        summary: update.description,
+        content: `<p>${escapeHtml(update.description)}</p>${update.link ? `<p style="margin-top:1rem;"><a href="${escapeHtml(update.link)}" target="_blank" rel="noopener noreferrer" style="color:var(--primary-600);font-weight:700;">Official Circular Link <i class="fa-solid fa-arrow-up-right-from-square"></i></a></p>` : ''}`
+      });
+    }
+  });
+}
+
+/**
+ * Show a toast notification with a variant (success, error, or default).
+ * @param {string} message
+ * @param {string} variant - 'success', 'error', or omit for default
+ */
+function showToastVariant(message, variant) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  let variantClass = '';
+  let iconHtml = '<i class="fa-solid fa-circle-check text-success"></i>';
+
+  if (variant === 'error') {
+    variantClass = ' toast-error';
+    iconHtml = '<i class="fa-solid fa-circle-exclamation" style="color:var(--danger-rose);"></i>';
+  } else if (variant === 'success') {
+    variantClass = ' toast-success';
+    iconHtml = '<i class="fa-solid fa-circle-check" style="color:var(--success-emerald);"></i>';
+  }
+
+  toast.className = 'toast-item' + variantClass;
+  toast.innerHTML = `${iconHtml} <span>${escapeHtml(message)}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+    toast.style.transition = 'all 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+// --- Hook into existing DOMContentLoaded init ---
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupAddUpdateFeature);
+} else {
+  setupAddUpdateFeature();
+}
+

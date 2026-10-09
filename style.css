@@ -2030,3 +2030,253 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   FLOATING ACTION BUTTON (FAB) - ADD NEW UPDATE
+   ========================================================================== */
+.fab-add-update {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--primary-600), var(--purple-600));
+  color: #ffffff;
+  font-size: 1.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(79, 70, 229, 0.4), 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 90;
+  transition: all var(--transition-spring);
+}
+
+.fab-add-update:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 8px 30px rgba(79, 70, 229, 0.55), 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.fab-add-update:active {
+  transform: scale(0.95) rotate(90deg);
+}
+
+/* Subtle pulsing glow ring behind the FAB */
+.fab-add-update::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-400), var(--purple-500));
+  opacity: 0;
+  z-index: -1;
+  animation: fabPulse 3s ease-in-out infinite;
+}
+
+@keyframes fabPulse {
+  0%, 100% { opacity: 0; transform: scale(0.85); }
+  50% { opacity: 0.25; transform: scale(1.05); }
+}
+
+/* ==========================================================================
+   ADD UPDATE MODAL CUSTOM STYLES
+   ========================================================================== */
+.modal-add-update {
+  max-width: 560px;
+}
+
+.add-update-modal-header {
+  background: linear-gradient(135deg, var(--primary-50), var(--purple-50));
+  border-bottom: 1px solid var(--primary-200);
+}
+
+.add-update-modal-body {
+  max-height: 72vh;
+  overflow-y: auto;
+}
+
+.add-update-textarea {
+  resize: vertical;
+  min-height: 90px;
+  max-height: 200px;
+  line-height: 1.55;
+}
+
+.required-star {
+  color: var(--danger-rose);
+  font-weight: 800;
+}
+
+.optional-tag {
+  color: var(--slate-400);
+  font-weight: 500;
+  font-size: 0.72rem;
+}
+
+.field-error {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--danger-rose);
+  margin-top: 0.25rem;
+  min-height: 0;
+  transition: all var(--transition-fast);
+}
+
+.field-error:empty {
+  display: none;
+}
+
+.form-control.input-error {
+  border-color: var(--danger-rose);
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.12);
+}
+
+.add-update-actions {
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--slate-200);
+  padding-top: 1.15rem;
+}
+
+.btn-publish-update {
+  background: linear-gradient(135deg, var(--primary-600), var(--purple-600));
+  box-shadow: 0 3px 12px rgba(79, 70, 229, 0.3);
+}
+
+.btn-publish-update:hover {
+  background: linear-gradient(135deg, var(--primary-700), var(--purple-700));
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
+}
+
+/* Success flash animation for newly added card */
+@keyframes cardFlashIn {
+  0% { opacity: 0; transform: translateY(-18px) scale(0.97); box-shadow: 0 0 0 4px rgba(99,102,241,0.3); }
+  60% { opacity: 1; transform: translateY(2px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); box-shadow: var(--shadow-sm); }
+}
+
+.news-card.card-just-added {
+  animation: cardFlashIn 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+/* User-created card link styling */
+.user-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--primary-600);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 0.5rem;
+  transition: color var(--transition-fast);
+}
+
+.user-card-link:hover {
+  color: var(--primary-800);
+  text-decoration: underline;
+}
+
+/* User-created card banner fallback */
+.user-card-bg {
+  background: linear-gradient(135deg, var(--slate-700) 0%, var(--slate-900) 100%);
+}
+
+.user-card-bg.cat-announcements { background: linear-gradient(135deg, #1e293b, #334155); }
+.user-card-bg.cat-events       { background: linear-gradient(135deg, #0f172a, #1e3a8a); }
+.user-card-bg.cat-achievements { background: linear-gradient(135deg, #1e1b4b, #312e81); }
+.user-card-bg.cat-placement    { background: linear-gradient(135deg, #f8fafc, #e0e7ff); border-bottom: 1px solid var(--slate-200); }
+.user-card-bg.cat-academic     { background: linear-gradient(135deg, #eff6ff, #dbeafe); border-bottom: 1px solid var(--slate-200); }
+
+.user-card-bg.cat-placement .card-floating-date,
+.user-card-bg.cat-academic .card-floating-date {
+  background: #ffffff;
+  color: var(--slate-700);
+  border: 1px solid var(--slate-200);
+}
+
+.user-card-illustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.user-card-illustration .user-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--primary-300);
+}
+
+.user-card-bg.cat-placement .user-card-icon,
+.user-card-bg.cat-academic .user-card-icon {
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  color: var(--primary-600);
+}
+
+.user-card-illustration .user-card-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.user-card-bg.cat-placement .user-card-label,
+.user-card-bg.cat-academic .user-card-label {
+  color: var(--slate-700);
+}
+
+/* Toast variants */
+.toast-item.toast-success {
+  border-left-color: var(--success-emerald);
+}
+
+.toast-item.toast-error {
+  border-left-color: var(--danger-rose);
+}
+
+/* Responsive FAB */
+@media (max-width: 768px) {
+  .fab-add-update {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .fab-add-update {
+    bottom: 16px;
+    right: 16px;
+    width: 46px;
+    height: 46px;
+    font-size: 1.15rem;
+  }
+
+  .modal-add-update {
+    max-width: 95vw;
+  }
+}
+
+/* Scale-up animation for modal dialog (reuse if not already defined) */
+.animate-scale-up {
+  animation: scaleUpModal 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleUpModal {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

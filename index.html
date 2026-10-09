@@ -467,7 +467,78 @@
         </article>
 
       </div>
+
+      <!-- Floating Add (+) Button (Faculty Announcement Portal) -->
+      <button class="fab-add-update" id="fabAddUpdateBtn" title="Faculty Portal: Add Department Announcement" aria-label="Faculty Portal: Add Department Announcement">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+
     </section>
+
+    <!-- MODAL: Add New Update Form (Faculty Portal) -->
+    <div class="modal-backdrop" id="addUpdateModal" style="display: none;">
+      <div class="modal-dialog-box modal-add-update animate-scale-up">
+        <div class="modal-header add-update-modal-header">
+          <div class="modal-title-wrap">
+            <i class="fa-solid fa-chalkboard-user modal-title-icon"></i>
+            <h3>Faculty Portal: Publish Announcement</h3>
+          </div>
+          <button class="modal-close-btn" id="closeAddUpdateModalBtn">&times;</button>
+        </div>
+        <div class="modal-body add-update-modal-body">
+          <p class="modal-intro">Authorized AI&amp;DS Faculty Portal. Publish official department circulars, academic notices, event announcements, and research updates directly to the department feed.</p>
+          <form id="addUpdateForm" novalidate>
+            <div class="form-group">
+              <label for="addUpdateTitle">Announcement Title <span class="required-star">*</span></label>
+              <input type="text" id="addUpdateTitle" class="form-control" placeholder="e.g. Mid-Semester Results Declared / Research Grant Call" required>
+              <span class="field-error" id="errorTitle"></span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-half">
+                <label for="addUpdateCategory">Category <span class="required-star">*</span></label>
+                <select id="addUpdateCategory" class="form-control" required>
+                  <option value="announcements">Announcement</option>
+                  <option value="events">Event</option>
+                  <option value="achievements">Achievement</option>
+                  <option value="placement">Placement</option>
+                  <option value="academic">Academic Update</option>
+                </select>
+              </div>
+              <div class="form-group col-half">
+                <label for="addUpdateDate">Date <span class="required-star">*</span></label>
+                <input type="date" id="addUpdateDate" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="addUpdateFacultyAuthor">Issued By / Faculty Authority <span class="required-star">*</span></label>
+              <input type="text" id="addUpdateFacultyAuthor" class="form-control" placeholder="e.g. Dr. Elena Vance (HOD) / AI&amp;DS Faculty Council" value="AI&amp;DS Faculty Council" required>
+              <span class="field-error" id="errorFacultyAuthor"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="addUpdateDescription">Description <span class="required-star">*</span></label>
+              <textarea id="addUpdateDescription" class="form-control add-update-textarea" rows="4" placeholder="Enter official departmental announcement details..." required></textarea>
+              <span class="field-error" id="errorDescription"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="addUpdateLink">Official Circular / Reference Link <span class="optional-tag">(Optional)</span></label>
+              <input type="url" id="addUpdateLink" class="form-control" placeholder="https://example.com/official-circular">
+              <span class="field-error" id="errorLink"></span>
+            </div>
+
+            <div class="modal-actions-footer add-update-actions">
+              <button type="button" class="btn btn-outline" id="cancelAddUpdateBtn">Cancel</button>
+              <button type="submit" class="btn btn-primary btn-publish-update" id="publishUpdateBtn">
+                <i class="fa-solid fa-paper-plane"></i> Publish Faculty Notice
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
   </main>
 

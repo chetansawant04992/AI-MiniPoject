@@ -1,0 +1,98 @@
+[
+  {
+    "id": 8,
+    "title": "AI & Data Science Project Exhibition 2026",
+    "category": "events",
+    "date": "2026-10-15",
+    "author": "AI&DS Faculty Council",
+    "ref": "FACULTY CIRCULAR • AI&DS FACULTY COUNCIL",
+    "description": "AIDS CIE  Mini project exhibition is scheduled on 15 OCT.",
+    "content": "<p>AIDS CIE  Mini project exhibition is scheduled on 15 OCT.</p>",
+    "link": "",
+    "created_at": "2026-10-09T16:29:04.948184Z"
+  },
+  {
+    "id": 7,
+    "title": "Freshers",
+    "category": "events",
+    "date": "2026-10-22",
+    "author": "AI&DS Faculty Council",
+    "ref": "FACULTY CIRCULAR • AI&DS FACULTY COUNCIL",
+    "description": "Freshers are scheduled on 22 OCT",
+    "content": "<p>Freshers are scheduled on 22 OCT</p>",
+    "link": "",
+    "created_at": "2026-10-09T16:26:44.271176Z"
+  },
+  {
+    "id": 1,
+    "title": "Internal Examination Schedule Released",
+    "category": "announcements",
+    "date": "07 October 2026",
+    "author": "AI&DS Exam Cell",
+    "ref": "NOTICE REF: AI-EX-26/10",
+    "description": "The department has released the schedule for the upcoming internal examinations. Review dates, assigned lab modules, and invigilation slots.",
+    "content": "<p>The department has released the complete schedule for the upcoming internal examinations across all AI&amp;DS batches.</p><h4>Student Guidelines:</h4><ul><li>Exams will commence on October 14, 2026 at Tech Block IV exam halls.</li><li>Students must carry their official institutional ID cards.</li><li>Seating charts will be published on the digital notice boards 30 minutes prior.</li></ul>",
+    "link": "",
+    "created_at": "2026-10-07T09:00:00Z"
+  },
+  {
+    "id": 2,
+    "title": "AI & Data Science Workshop",
+    "category": "events",
+    "date": "05 October 2026",
+    "author": "Prof. R. Sharma (Coordinator)",
+    "ref": "SYMPOSIUM SERIES #04",
+    "description": "A hands-on workshop on Generative AI and Machine Learning will be conducted for students, featuring live tensor model fine-tuning and API integration.",
+    "content": "<p>A full-day technical workshop covering deep neural architecture tuning, synthetic data pipelines, and real-world deployment practices.</p><h4>Key Highlights:</h4><ul><li>Live model training on DGX A100 Tensor Core supercluster.</li><li>Guest lectures by industry senior machine learning researchers.</li><li>Certificate of completion awarded to all attendees.</li></ul>",
+    "link": "https://aids.university.edu/workshop-registration",
+    "created_at": "2026-10-05T10:30:00Z"
+  },
+  {
+    "id": 3,
+    "title": "Students Selected for Internship Program",
+    "category": "achievements",
+    "date": "02 October 2026",
+    "author": "Industry Relations Cell",
+    "ref": "SPOTLIGHT STORY",
+    "description": "AI&DS students have successfully secured internship opportunities with leading technology companies, specializing in NLP and autonomous vision systems.",
+    "content": "<p>We are delighted to congratulate 12 of our department students who have accepted prestigious engineering and research internship offers for Spring 2027.</p><h4>Recruiting Organizations:</h4><ul><li><strong>Google DeepMind:</strong> 3 Research Interns</li><li><strong>Microsoft Research:</strong> 4 NLP Software Engineers</li><li><strong>OpenAI & Databricks:</strong> 5 Distributed Systems Interns</li></ul>",
+    "link": "",
+    "created_at": "2026-10-02T14:15:00Z"
+  },
+  {
+    "id": 4,
+    "title": "Campus Placement Drive",
+    "category": "placement",
+    "date": "30 September 2026",
+    "author": "Department Placement Cell",
+    "ref": "RECRUITMENT ROUND 2026-27",
+    "description": "A placement drive for final-year AI & Data Science students will be conducted soon. Eligible candidates are advised to verify their resume repository.",
+    "content": "<p>The Departmental Placement Cell announces the commencement of Phase 1 Campus Recruitment for the Class of 2026/2027.</p><h4>Eligibility & Verification:</h4><ul><li>Minimum CGPA requirement: 7.5 with zero active backlogs.</li><li>Submission of verified GitHub portfolio and published Capstone artifacts.</li><li>Over 45 Global Tech Giants participating in On-Campus interviews.</li></ul>",
+    "link": "https://aids.university.edu/placements-2026",
+    "created_at": "2026-09-30T11:00:00Z"
+  },
+  {
+    "id": 5,
+    "title": "New AI & ML Laboratory Activities",
+    "category": "academic",
+    "date": "28 September 2026",
+    "author": "Academic Board of Studies",
+    "ref": "CURRICULUM REVISION",
+    "description": "New practical activities have been introduced for Artificial Intelligence and Machine Learning courses, with emphasis on transformers and diffusion pipelines.",
+    "content": "<p>As part of our continuous curriculum evolution, the Department Academic Council has upgraded all laboratory assignments to PyTorch 2.5 and FlashAttention-3.</p><h4>New Practical Modules:</h4><ul><li><strong>Lab Module 5:</strong> Vision Transformers (ViT) & Diffusion Denoising implementations.</li><li><strong>Lab Module 6:</strong> Graph Neural Networks for Drug Discovery.</li><li><strong>Lab Module 7:</strong> Quantization and ONNX Runtime deployment on edge devices.</li></ul>",
+    "link": "",
+    "created_at": "2026-09-28T08:45:00Z"
+  },
+  {
+    "id": 6,
+    "title": "Algorand-26 Annual Hackathon",
+    "category": "events",
+    "date": "25 September 2026",
+    "author": "Student AI Guild",
+    "ref": "FLAGSHIP SPRINT",
+    "description": "Registrations now open for the 48-hour AI innovation sprint with industry mentorship, rapid prototyping, and startup seed grants.",
+    "content": "<p>Gear up for the flagship AI innovation sprint of the year! Algorand-26 brings together the brightest minds in machine learning, robotics, and generative AI.</p><h4>Hackathon Tracks:</h4><ul><li>Autonomous Agents & Reasoning Systems</li><li>AI for Climate Resilience & Smart Cities</li><li>Decentralized AI & Secure Verifiable Compute</li></ul><p><strong>Prizes:</strong> $15,000 total prize pool + fast-track incubator grants.</p>",
+    "link": "https://aids.university.edu/hackathon-2026",
+    "created_at": "2026-09-25T16:00:00Z"
+  }
+]
